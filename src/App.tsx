@@ -1,14 +1,8 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button"
+import { Renderer } from "./Renderer";
+import { mockResponse } from "./mock-response";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <Button onClick={() => setCount((c) => c + 1)} variant="outline">Count is {count}</Button>
-    </>
-  );
+  return <Renderer node={mockResponse} />;
 }
 
 export default App;
