@@ -3,15 +3,30 @@ import { Button } from "./components/ui/button";
 import { Renderer } from "./Renderer";
 import { mockResponse } from "./mock-response";
 import { safeParseUiNode } from "./schema";
+import { generateUiTree } from "./lib/llm";
 
 function App() {
   const [prompt, setPrompt] = useState("");
-  const parsedResponse = safeParseUiNode(mockResponse);
+  const [uiTree, setUiTree] = useState(mockResponse);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // 本刀不呼叫模型；之後接 Gemini 時從這裡送出 prompt
+    const trimmed = prompt.trim();
+    if (!trimmed) return;
+    try {
+      const data = await generateUiTree(trimmed); // 你 llm.ts 的函式
+      const parsed = safeParseUiNode(data);
+      if (!parsed.success) {
+        // 顯示錯誤（state 或另外一個 error state）
+        console.error(parsed.error.message);
+        return;
+      }
+      setUiTree(parsed.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
+  const parsedResponse = safeParseUiNode(uiTree);
 
   return (
     <div className="mx-auto flex min-h-svh max-w-2xl flex-col gap-6 px-4 py-8">
