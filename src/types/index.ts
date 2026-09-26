@@ -19,4 +19,5 @@ type CustomButton = {
 type CustomText = {
   type: "text";
   text: string;
+  variant?: "body" | "h1" | "h2" | "h3";
 };

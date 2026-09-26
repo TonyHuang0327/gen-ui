@@ -18,7 +18,11 @@ const uiNodeSchema: z.ZodType<UiNode> = z.lazy(() =>
         ])
         .optional(),
     }),
-    z.object({ type: z.literal("text"), text: z.string() }),
+    z.object({
+      type: z.literal("text"),
+      text: z.string(),
+      variant: z.enum(["body", "h1", "h2", "h3"]).optional(),
+    }),
   ]),
 );
 export const safeParseUiNode = (node: unknown) => {

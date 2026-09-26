@@ -33,6 +33,10 @@ const uiJsonSchema = {
             properties: {
               type: { type: "string", enum: ["text"] },
               text: { type: "string" },
+              variant: {
+                type: "string",
+                enum: ["body", "h1", "h2", "h3"],
+              },
             },
             required: ["type", "text"],
           },
@@ -57,6 +61,7 @@ export async function generateUiTree(prompt: string): Promise<unknown> {
       {
         type: "text",
         text: `你是 UI JSON 產生器。只輸出符合 schema 的 JSON，不要 markdown。
+text 節點：標題用 variant "h1"|"h2"|"h3"，內文用 "body" 或省略 variant。
 使用者需求：${prompt}`,
       },
     ],
