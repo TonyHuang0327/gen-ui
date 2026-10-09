@@ -1,9 +1,26 @@
-export type UiNode = CustomPage | CustomButton | CustomText;
+export type LeafNode = CustomButton | CustomText;
+
+export type PageChild = CustomStack | CustomCard | LeafNode;
+
+export type UiNode = CustomPage | CustomStack | CustomCard | LeafNode;
 
 type CustomPage = {
   type: "page";
-  children: UiNode[];
+  children: PageChild[];
 };
+
+type CustomStack = {
+  type: "stack";
+  direction?: "vertical" | "horizontal";
+  children: LeafNode[];
+};
+
+type CustomCard = {
+  type: "card";
+  title?: string;
+  children: LeafNode[];
+};
+
 type CustomButton = {
   type: "button";
   label: string;

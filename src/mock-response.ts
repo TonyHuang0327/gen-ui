@@ -9,13 +9,35 @@ export const mockResponse: UiNode = {
       variant: "h1",
     },
     {
-      type: "button",
-      label: "Click me",
-      variant: "outline",
+      type: "card",
+      title: "快速開始",
+      children: [
+        {
+          type: "text",
+          text: "輸入提示後送出，由模型產生 UI。",
+        },
+        {
+          type: "button",
+          label: "了解更多",
+          variant: "outline",
+        },
+      ],
     },
     {
-      type: "text",
-      text: "Hello, world!",
+      type: "stack",
+      direction: "horizontal",
+      children: [
+        {
+          type: "button",
+          label: "主要動作",
+          variant: "default",
+        },
+        {
+          type: "button",
+          label: "次要動作",
+          variant: "secondary",
+        },
+      ],
     },
   ],
 };

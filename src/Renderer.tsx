@@ -1,16 +1,8 @@
 import { Button } from "./components/ui/button";
-import type { UiNode } from "./types";
+import type { LeafNode, UiNode } from "./types";
 
-export const Renderer = ({ node }: { node: UiNode }) => {
+function renderLeaf(node: LeafNode) {
   switch (node.type) {
-    case "page":
-      return (
-        <div>
-          {node.children.map((child, index) => (
-            <Renderer key={index} node={child} />
-          ))}
-        </div>
-      );
     case "button":
       return <Button variant={node.variant}>{node.label}</Button>;
     case "text": {
@@ -26,5 +18,50 @@ export const Renderer = ({ node }: { node: UiNode }) => {
           return <p>{node.text}</p>;
       }
     }
+  }
+}
+
+export const Renderer = ({ node }: { node: UiNode }) => {
+  switch (node.type) {
+    case "page":
+      return (
+        <div className="flex flex-col gap-4">
+          {node.children.map((child, index) => (
+            <Renderer key={index} node={child} />
+          ))}
+        </div>
+      );
+    case "stack": {
+      const horizontal = node.direction === "horizontal";
+      return (
+        <div
+          className={
+            horizontal
+              ? "flex flex-row flex-wrap gap-3"
+              : "flex flex-col gap-3"
+          }
+        >
+          {node.children.map((child, index) => (
+            <div key={index}>{renderLeaf(child)}</div>
+          ))}
+        </div>
+      );
+    }
+    case "card":
+      return (
+        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+          {node.title ? (
+            <h3 className="mb-3 text-lg font-semibold">{node.title}</h3>
+          ) : null}
+          <div className="flex flex-col gap-3">
+            {node.children.map((child, index) => (
+              <div key={index}>{renderLeaf(child)}</div>
+            ))}
+          </div>
+        </div>
+      );
+    case "button":
+    case "text":
+      return renderLeaf(node);
   }
 };

@@ -1,6 +1,68 @@
 import { GoogleGenAI } from "@google/genai";
 
-// 根一定是 page；children 只允許 button / text（先不遞迴 page，降低 schema 複雜度）
+const buttonJsonSchema = {
+  type: "object",
+  properties: {
+    type: { type: "string", enum: ["button"] },
+    label: { type: "string" },
+    variant: {
+      type: "string",
+      enum: [
+        "default",
+        "outline",
+        "ghost",
+        "destructive",
+        "secondary",
+        "link",
+      ],
+    },
+  },
+  required: ["type", "label"],
+} as const;
+
+const textJsonSchema = {
+  type: "object",
+  properties: {
+    type: { type: "string", enum: ["text"] },
+    text: { type: "string" },
+    variant: {
+      type: "string",
+      enum: ["body", "h1", "h2", "h3"],
+    },
+  },
+  required: ["type", "text"],
+} as const;
+
+const leafJsonSchema = {
+  anyOf: [buttonJsonSchema, textJsonSchema],
+} as const;
+
+const stackJsonSchema = {
+  type: "object",
+  properties: {
+    type: { type: "string", enum: ["stack"] },
+    direction: { type: "string", enum: ["vertical", "horizontal"] },
+    children: {
+      type: "array",
+      items: leafJsonSchema,
+    },
+  },
+  required: ["type", "children"],
+} as const;
+
+const cardJsonSchema = {
+  type: "object",
+  properties: {
+    type: { type: "string", enum: ["card"] },
+    title: { type: "string" },
+    children: {
+      type: "array",
+      items: leafJsonSchema,
+    },
+  },
+  required: ["type", "children"],
+} as const;
+
 const uiJsonSchema = {
   type: "object",
   properties: {
@@ -9,37 +71,10 @@ const uiJsonSchema = {
       type: "array",
       items: {
         anyOf: [
-          {
-            type: "object",
-            properties: {
-              type: { type: "string", enum: ["button"] },
-              label: { type: "string" },
-              variant: {
-                type: "string",
-                enum: [
-                  "default",
-                  "outline",
-                  "ghost",
-                  "destructive",
-                  "secondary",
-                  "link",
-                ],
-              },
-            },
-            required: ["type", "label"],
-          },
-          {
-            type: "object",
-            properties: {
-              type: { type: "string", enum: ["text"] },
-              text: { type: "string" },
-              variant: {
-                type: "string",
-                enum: ["body", "h1", "h2", "h3"],
-              },
-            },
-            required: ["type", "text"],
-          },
+          stackJsonSchema,
+          cardJsonSchema,
+          buttonJsonSchema,
+          textJsonSchema,
         ],
       },
     },
@@ -56,12 +91,13 @@ export async function generateUiTree(prompt: string): Promise<unknown> {
   const client = new GoogleGenAI({ apiKey });
 
   const interaction = await client.interactions.create({
-    model: "gemini-3.6-flash",
+    model: "gemini-3.1-flash-lite",
     input: [
       {
         type: "text",
         text: `你是 UI JSON 產生器。只輸出符合 schema 的 JSON，不要 markdown。
 text 節點：標題用 variant "h1"|"h2"|"h3"，內文用 "body" 或省略 variant。
+排版：分區用 stack 或 card；橫向排列用 stack 且 direction "horizontal"。容器內只能放 button 與 text。
 使用者需求：${prompt}`,
       },
     ],
