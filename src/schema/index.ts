@@ -45,8 +45,14 @@ const pageChildSchema: z.ZodType<PageChild> = z.union([
   leafNodeSchema,
 ]);
 
+const pageThemeSchema = z.enum(["default", "calm", "bold"]);
+
 const uiNodeSchema: z.ZodType<UiNode> = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("page"), children: z.array(pageChildSchema) }),
+  z.object({
+    type: z.literal("page"),
+    theme: pageThemeSchema.optional(),
+    children: z.array(pageChildSchema),
+  }),
   stackSchema,
   cardSchema,
   buttonSchema,

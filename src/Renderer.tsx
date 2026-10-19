@@ -8,14 +8,26 @@ function renderLeaf(node: LeafNode) {
     case "text": {
       switch (node.variant) {
         case "h1":
-          return <h1 className="text-2xl font-semibold">{node.text}</h1>;
+          return (
+            <h1 className="text-2xl font-semibold text-foreground">
+              {node.text}
+            </h1>
+          );
         case "h2":
-          return <h2 className="text-xl font-semibold">{node.text}</h2>;
+          return (
+            <h2 className="text-xl font-semibold text-foreground">
+              {node.text}
+            </h2>
+          );
         case "h3":
-          return <h3 className="text-lg font-semibold">{node.text}</h3>;
+          return (
+            <h3 className="text-lg font-semibold text-foreground">
+              {node.text}
+            </h3>
+          );
         case "body":
         default:
-          return <p>{node.text}</p>;
+          return <p className="text-foreground">{node.text}</p>;
       }
     }
   }
@@ -25,7 +37,10 @@ export const Renderer = ({ node }: { node: UiNode }) => {
   switch (node.type) {
     case "page":
       return (
-        <div className="flex flex-col gap-4">
+        <div
+          data-theme={node.theme ?? "default"}
+          className="flex flex-col gap-4 bg-background text-foreground"
+        >
           {node.children.map((child, index) => (
             <Renderer key={index} node={child} />
           ))}
@@ -49,9 +64,11 @@ export const Renderer = ({ node }: { node: UiNode }) => {
     }
     case "card":
       return (
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+        <div className="rounded-xl border border-border bg-card p-4 text-card-foreground">
           {node.title ? (
-            <h3 className="mb-3 text-lg font-semibold">{node.title}</h3>
+            <h3 className="mb-3 text-lg font-semibold text-foreground">
+              {node.title}
+            </h3>
           ) : null}
           <div className="flex flex-col gap-3">
             {node.children.map((child, index) => (

@@ -2,6 +2,7 @@ import type { UiNode } from "./types";
 
 export const mockResponse: UiNode = {
   type: "page",
+  theme: "calm",
   children: [
     {
       type: "text",

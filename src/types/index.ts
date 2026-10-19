@@ -4,8 +4,11 @@ export type PageChild = CustomStack | CustomCard | LeafNode;
 
 export type UiNode = CustomPage | CustomStack | CustomCard | LeafNode;
 
+export type PageTheme = "default" | "calm" | "bold";
+
 type CustomPage = {
   type: "page";
+  theme?: PageTheme;
   children: PageChild[];
 };
 

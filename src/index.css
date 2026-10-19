@@ -1,1 +1,91 @@
 @import "tailwindcss";
+
+/* 預設 theme（與 data-theme="default" 相同） */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --border: #e2e8f0;
+  --destructive: #dc2626;
+  --ring: #2563eb;
+  --input: #e2e8f0;
+  --radius: 0.5rem;
+}
+
+[data-theme="default"] {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --border: #e2e8f0;
+  --destructive: #dc2626;
+  --ring: #2563eb;
+  --input: #e2e8f0;
+}
+
+/* 柔和 teal / sage */
+[data-theme="calm"] {
+  --background: #f8faf9;
+  --foreground: #134e4a;
+  --card: #ffffff;
+  --card-foreground: #134e4a;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --secondary: #d1e7e3;
+  --secondary-foreground: #134e4a;
+  --muted: #e7f0ee;
+  --muted-foreground: #3f6b66;
+  --border: #c5ddd8;
+  --destructive: #dc2626;
+  --ring: #0f766e;
+  --input: #c5ddd8;
+}
+
+/* 高對比：主色深墨，secondary 暖橘強調 */
+[data-theme="bold"] {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f97316;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --border: #cbd5e1;
+  --destructive: #dc2626;
+  --ring: #0f172a;
+  --input: #cbd5e1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --radius-md: var(--radius);
+}
