@@ -1,7 +1,6 @@
-import type { LeafNode, PageChild, UiNode } from "@/types";
 import z from "zod";
 
-const buttonSchema = z.object({
+export const buttonSchema = z.object({
   type: z.literal("button"),
   label: z.string(),
   variant: z
@@ -16,49 +15,60 @@ const buttonSchema = z.object({
     .optional(),
 });
 
-const textSchema = z.object({
+export const textSchema = z.object({
   type: z.literal("text"),
   text: z.string(),
   variant: z.enum(["body", "h1", "h2", "h3"]).optional(),
 });
 
-const leafNodeSchema: z.ZodType<LeafNode> = z.discriminatedUnion("type", [
+export const leafNodeSchema = z.discriminatedUnion("type", [
   buttonSchema,
   textSchema,
 ]);
 
-const stackSchema = z.object({
+export const stackSchema = z.object({
   type: z.literal("stack"),
   direction: z.enum(["vertical", "horizontal"]).optional(),
   children: z.array(leafNodeSchema),
 });
 
-const cardSchema = z.object({
+export const cardSchema = z.object({
   type: z.literal("card"),
   title: z.string().optional(),
   children: z.array(leafNodeSchema),
 });
 
-const pageChildSchema: z.ZodType<PageChild> = z.union([
+export const pageChildSchema = z.union([
   stackSchema,
   cardSchema,
   leafNodeSchema,
 ]);
 
-const pageThemeSchema = z.enum(["default", "calm", "bold"]);
+export const pageThemeSchema = z.enum(["default", "calm", "bold"]);
 
-const uiNodeSchema: z.ZodType<UiNode> = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("page"),
-    theme: pageThemeSchema.optional(),
-    children: z.array(pageChildSchema),
-  }),
-  stackSchema,
-  cardSchema,
-  buttonSchema,
-  textSchema,
-]);
+export const uiPageSchema = z.object({
+  type: z.literal("page"),
+  theme: pageThemeSchema.optional(),
+  children: z.array(pageChildSchema),
+});
 
-export const safeParseUiNode = (node: unknown) => {
-  return uiNodeSchema.safeParse(node);
+export type UiPage = z.infer<typeof uiPageSchema>;
+export type PageChild = z.infer<typeof pageChildSchema>;
+export type LeafNode = z.infer<typeof leafNodeSchema>;
+export type PageTheme = z.infer<typeof pageThemeSchema>;
+export type RenderableNode = UiPage | PageChild;
+
+export const safeParseUiPage = (data: unknown) => {
+  return uiPageSchema.safeParse(data);
 };
+
+/** Gemini response_format：由 uiPageSchema 衍生，移除 $schema 等 host 不吃的欄位 */
+function toGeminiJsonSchema(schema: Record<string, unknown>) {
+  const rest = { ...schema };
+  delete rest.$schema;
+  return rest;
+}
+
+export const uiPageJsonSchema = toGeminiJsonSchema(
+  z.toJSONSchema(uiPageSchema) as Record<string, unknown>,
+);

@@ -1,5 +1,5 @@
 import { Button } from "./components/ui/button";
-import type { LeafNode, UiNode } from "./types";
+import type { LeafNode, PageChild, UiPage } from "@/schema";
 
 function renderLeaf(node: LeafNode) {
   switch (node.type) {
@@ -33,19 +33,8 @@ function renderLeaf(node: LeafNode) {
   }
 }
 
-export const Renderer = ({ node }: { node: UiNode }) => {
+function PageChildRenderer({ node }: { node: PageChild }) {
   switch (node.type) {
-    case "page":
-      return (
-        <div
-          data-theme={node.theme ?? "default"}
-          className="flex flex-col gap-4 bg-background text-foreground"
-        >
-          {node.children.map((child, index) => (
-            <Renderer key={index} node={child} />
-          ))}
-        </div>
-      );
     case "stack": {
       const horizontal = node.direction === "horizontal";
       return (
@@ -81,4 +70,17 @@ export const Renderer = ({ node }: { node: UiNode }) => {
     case "text":
       return renderLeaf(node);
   }
+}
+
+export const Renderer = ({ node }: { node: UiPage }) => {
+  return (
+    <div
+      data-theme={node.theme ?? "default"}
+      className="flex flex-col gap-4 bg-background text-foreground"
+    >
+      {node.children.map((child, index) => (
+        <PageChildRenderer key={index} node={child} />
+      ))}
+    </div>
+  );
 };

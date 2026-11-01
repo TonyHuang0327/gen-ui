@@ -2,12 +2,12 @@ import { useState, type FormEvent } from "react";
 import { Button } from "./components/ui/button";
 import { Renderer } from "./Renderer";
 import { mockResponse } from "./mock-response";
-import { safeParseUiNode } from "./schema";
+import { safeParseUiPage, type UiPage } from "./schema";
 import { generateUiTree } from "./lib/llm";
 
 function App() {
   const [prompt, setPrompt] = useState("");
-  const [uiTree, setUiTree] = useState(mockResponse);
+  const [uiTree, setUiTree] = useState<UiPage>(mockResponse);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ function App() {
 
     try {
       const data = await generateUiTree(trimmed);
-      const parsed = safeParseUiNode(data);
+      const parsed = safeParseUiPage(data);
       if (!parsed.success) {
         setError(parsed.error.message);
         return;
@@ -35,7 +35,7 @@ function App() {
     }
   }
 
-  const parsedResponse = safeParseUiNode(uiTree);
+  const parsedResponse = safeParseUiPage(uiTree);
 
   return (
     <div className="mx-auto flex min-h-svh max-w-2xl flex-col gap-6 px-4 py-8">

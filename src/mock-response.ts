@@ -1,6 +1,6 @@
-import type { UiNode } from "./types";
+import type { UiPage } from "@/schema";
 
-export const mockResponse: UiNode = {
+export const mockResponse: UiPage = {
   type: "page",
   theme: "calm",
   children: [

@@ -1,90 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-
-const buttonJsonSchema = {
-  type: "object",
-  properties: {
-    type: { type: "string", enum: ["button"] },
-    label: { type: "string" },
-    variant: {
-      type: "string",
-      enum: [
-        "default",
-        "outline",
-        "ghost",
-        "destructive",
-        "secondary",
-        "link",
-      ],
-    },
-  },
-  required: ["type", "label"],
-} as const;
-
-const textJsonSchema = {
-  type: "object",
-  properties: {
-    type: { type: "string", enum: ["text"] },
-    text: { type: "string" },
-    variant: {
-      type: "string",
-      enum: ["body", "h1", "h2", "h3"],
-    },
-  },
-  required: ["type", "text"],
-} as const;
-
-const leafJsonSchema = {
-  anyOf: [buttonJsonSchema, textJsonSchema],
-} as const;
-
-const stackJsonSchema = {
-  type: "object",
-  properties: {
-    type: { type: "string", enum: ["stack"] },
-    direction: { type: "string", enum: ["vertical", "horizontal"] },
-    children: {
-      type: "array",
-      items: leafJsonSchema,
-    },
-  },
-  required: ["type", "children"],
-} as const;
-
-const cardJsonSchema = {
-  type: "object",
-  properties: {
-    type: { type: "string", enum: ["card"] },
-    title: { type: "string" },
-    children: {
-      type: "array",
-      items: leafJsonSchema,
-    },
-  },
-  required: ["type", "children"],
-} as const;
-
-const uiJsonSchema = {
-  type: "object",
-  properties: {
-    type: { type: "string", enum: ["page"] },
-    theme: {
-      type: "string",
-      enum: ["default", "calm", "bold"],
-    },
-    children: {
-      type: "array",
-      items: {
-        anyOf: [
-          stackJsonSchema,
-          cardJsonSchema,
-          buttonJsonSchema,
-          textJsonSchema,
-        ],
-      },
-    },
-  },
-  required: ["type", "children"],
-} as const;
+import { uiPageJsonSchema } from "@/schema";
 
 export async function generateUiTree(prompt: string): Promise<unknown> {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -109,7 +24,7 @@ text 節點：標題用 variant "h1"|"h2"|"h3"，內文用 "body" 或省略 vari
     response_format: {
       type: "text",
       mime_type: "application/json",
-      schema: uiJsonSchema,
+      schema: uiPageJsonSchema,
     },
   });
 
