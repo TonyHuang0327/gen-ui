@@ -25,7 +25,32 @@ export const textSchema = z.object({
   variant: z.enum(["body", "h1", "h2", "h3"]).optional(),
 });
 
-export const leafNodeSchema = z.union([buttonSchema, textSchema]);
+export const listSchema = z.object({
+  type: z.enum(["list"]),
+  items: z.array(z.string()),
+  ordered: z.boolean().optional(),
+});
+
+export const badgeSchema = z.object({
+  type: z.enum(["badge"]),
+  label: z.string(),
+  variant: z.enum(["default", "secondary", "outline", "destructive"]).optional(),
+});
+
+export const alertSchema = z.object({
+  type: z.enum(["alert"]),
+  title: z.string().optional(),
+  description: z.string(),
+  variant: z.enum(["default", "destructive"]).optional(),
+});
+
+export const leafNodeSchema = z.union([
+  buttonSchema,
+  textSchema,
+  listSchema,
+  badgeSchema,
+  alertSchema,
+]);
 
 export const stackSchema = z.object({
   type: z.enum(["stack"]),

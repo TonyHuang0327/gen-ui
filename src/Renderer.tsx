@@ -1,3 +1,5 @@
+import { Alert, AlertDescription, AlertTitle } from "./components/ui/alert";
+import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import type { LeafNode, PageChild, UiPage } from "@/schema";
 
@@ -29,6 +31,32 @@ function renderLeaf(node: LeafNode) {
         default:
           return <p className="text-foreground">{node.text}</p>;
       }
+    }
+    case "list": {
+      const ListTag = node.ordered ? "ol" : "ul";
+      return (
+        <ListTag
+          className={`${node.ordered ? "list-decimal" : "list-disc"} pl-5 text-foreground`}
+        >
+          {node.items.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ListTag>
+      );
+    }
+    case "badge":
+      return <Badge variant={node.variant}>{node.label}</Badge>;
+    case "alert":
+      return (
+        <Alert variant={node.variant}>
+          {node.title ? <AlertTitle>{node.title}</AlertTitle> : null}
+          <AlertDescription>{node.description}</AlertDescription>
+        </Alert>
+      );
+    default: {
+      // 新增元件卻漏寫 case 時，這裡會變成編譯錯誤
+      const unhandled: never = node;
+      return unhandled;
     }
   }
 }
@@ -68,7 +96,14 @@ function PageChildRenderer({ node }: { node: PageChild }) {
       );
     case "button":
     case "text":
+    case "list":
+    case "badge":
+    case "alert":
       return renderLeaf(node);
+    default: {
+      const unhandled: never = node;
+      return unhandled;
+    }
   }
 }
 

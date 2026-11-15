@@ -18,6 +18,21 @@ export const mockResponse: UiPage = {
           text: "輸入提示後送出，由模型產生 UI。",
         },
         {
+          type: "list",
+          items: ["輸入想要的畫面", "按下送出", "檢視產生的 UI"],
+          ordered: true,
+        },
+        {
+          type: "badge",
+          label: "Beta",
+          variant: "secondary",
+        },
+        {
+          type: "alert",
+          title: "提示",
+          description: "目前的畫面是預設範例，尚未呼叫模型。",
+        },
+        {
           type: "button",
           label: "了解更多",
           variant: "outline",
