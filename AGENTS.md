@@ -38,6 +38,16 @@ z.union([buttonSchema, badgeSchema])
 
 用 shadcn CLI 加元件後要檢查：產生的檔案是否 import `cn` 自 `@/lib/utils`（曾出現誤匯入 npm 套件 `cn` 的情況），
 以及 `package.json` 有沒有被多加依賴。
+另外要檢查元件用到的顏色 token（例如 `bg-popover`、`bg-accent`）有沒有定義在 `src/index.css`；
+沒定義的話那個顏色會是透明（對話框曾因缺 `--popover` 而背景透明）。浮層掛在 body 上，只需定義在 `:root`。
+
+## API Key（BYOK）
+
+- Gemini API key 由使用者在畫面右上角的設定對話框貼上，只存在瀏覽器的 localStorage（`src/lib/api-key.ts`），
+  並由瀏覽器直接送到 Google。專案不讀 `VITE_GEMINI_API_KEY` 之類的環境變數，
+  避免 key 被打包進 bundle。**不要**重新加回環境變數 fallback。
+- `generateUiTree(prompt, apiKey)` 的 key 由呼叫端傳入。寫驗證腳本時要自己提供 key，
+  不要把 key 寫進程式碼，也不要在 log 或錯誤訊息中印出。
 
 ## 其他
 

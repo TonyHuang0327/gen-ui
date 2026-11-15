@@ -1,10 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 import { uiPageJsonSchema } from "@/schema";
 
-export async function generateUiTree(prompt: string): Promise<unknown> {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+export async function generateUiTree(
+  prompt: string,
+  apiKey: string,
+): Promise<unknown> {
   if (!apiKey) {
-    throw new Error("缺少 VITE_GEMINI_API_KEY");
+    throw new Error("請先在右上角設定 Gemini API Key");
   }
 
   const client = new GoogleGenAI({ apiKey });
