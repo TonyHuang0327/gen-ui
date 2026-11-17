@@ -20,7 +20,7 @@ function App() {
     if (!trimmed) return;
 
     if (!apiKey) {
-      setError("請先點右上角的設定按鈕，貼上你的 Gemini API Key。");
+      setError("Click the settings button in the top-right corner and paste your Gemini API key.");
       return;
     }
 
@@ -62,11 +62,11 @@ function App() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Gen UI</h1>
           <p className="mt-1 text-sm text-neutral-600">
-            輸入提示，由模型產生 UI。
+            Enter a prompt and let the model generate a UI.
           </p>
           {apiKey ? null : (
             <p className="mt-1 text-sm text-amber-700">
-              尚未設定 API Key，請點右上角的設定按鈕。
+              No API key set. Click the settings button in the top-right corner.
             </p>
           )}
         </div>
@@ -78,13 +78,13 @@ function App() {
       </header>
 
       <section
-        aria-label="產生結果"
+        aria-label="Generated result"
         aria-busy={loading}
         aria-live="polite"
         className="min-h-48 rounded-xl border border-neutral-200 bg-neutral-50 p-4"
       >
         {loading ? (
-          <p className="text-sm text-neutral-600">產生中…</p>
+          <p className="text-sm text-neutral-600">Generating…</p>
         ) : (
           <div className="flex flex-col gap-3">
             {error ? (
@@ -103,7 +103,7 @@ function App() {
 
       <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         <label htmlFor="prompt" className="text-sm font-medium">
-          提示
+          Prompt
         </label>
         <textarea
           id="prompt"
@@ -116,7 +116,7 @@ function App() {
         />
         <div className="flex justify-end">
           <Button type="submit" disabled={loading || !prompt.trim()}>
-            {loading ? "產生中…" : "送出"}
+            {loading ? "Generating…" : "Submit"}
           </Button>
         </div>
       </form>

@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 type SettingsDialogProps = {
-  /** 目前已儲存的 key，只用來判斷是否已設定，不會顯示在畫面上 */
+  /** The currently saved key. Only used to tell whether one is set; never shown on screen. */
   apiKey: string;
   onSave: (key: string) => void;
   onClear: () => void;
@@ -25,7 +25,7 @@ export function SettingsDialog({ apiKey, onSave, onClear }: SettingsDialogProps)
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
-    // 每次開啟都從空白開始，不把已存的 key 填回輸入框
+    // Always start empty; never fill the saved key back into the input.
     if (next) setDraft("");
   }
 
@@ -45,17 +45,18 @@ export function SettingsDialog({ apiKey, onSave, onClear }: SettingsDialogProps)
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
-        render={<Button variant="ghost" size="icon" aria-label="設定" />}
+        render={<Button variant="ghost" size="icon" aria-label="Settings" />}
       >
         <SettingsIcon />
       </DialogTrigger>
       <DialogContent>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>設定</DialogTitle>
+            <DialogTitle>Settings</DialogTitle>
             <DialogDescription>
-              貼上你自己的 Gemini API Key。Key 只會存在這個瀏覽器，並直接送到
-              Google，不會經過其他伺服器。
+              Paste your own Gemini API key. The key is stored only in this
+              browser and is sent directly to Google, never through any other
+              server.
             </DialogDescription>
           </DialogHeader>
 
@@ -68,23 +69,25 @@ export function SettingsDialog({ apiKey, onSave, onClear }: SettingsDialogProps)
               type="password"
               autoComplete="off"
               spellCheck={false}
-              placeholder={apiKey ? "已設定，貼上新的 key 可覆蓋" : "貼上 API Key"}
+              placeholder={
+                apiKey ? "Already set. Paste a new key to replace it" : "Paste API key"
+              }
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
             />
             <p className="text-xs text-muted-foreground">
-              目前狀態：{apiKey ? "已設定" : "尚未設定"}
+              Status: {apiKey ? "Set" : "Not set"}
             </p>
           </div>
 
           <DialogFooter>
             {apiKey ? (
               <Button type="button" variant="outline" onClick={handleClear}>
-                清除
+                Clear
               </Button>
             ) : null}
             <Button type="submit" disabled={!draft.trim()}>
-              儲存
+              Save
             </Button>
           </DialogFooter>
         </form>
