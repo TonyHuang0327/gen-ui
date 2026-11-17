@@ -54,7 +54,7 @@ function renderLeaf(node: LeafNode) {
         </Alert>
       );
     default: {
-      // 新增元件卻漏寫 case 時，這裡會變成編譯錯誤
+      // Adding a component without a matching case becomes a compile error here
       const unhandled: never = node;
       return unhandled;
     }
