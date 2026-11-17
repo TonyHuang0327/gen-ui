@@ -6,20 +6,20 @@ export const mockResponse: UiPage = {
   children: [
     {
       type: "text",
-      text: "歡迎使用 Gen UI",
+      text: "Welcome to Gen UI",
       variant: "h1",
     },
     {
       type: "card",
-      title: "快速開始",
+      title: "Quick start",
       children: [
         {
           type: "text",
-          text: "輸入提示後送出，由模型產生 UI。",
+          text: "Enter a prompt and submit it to let the model generate a UI.",
         },
         {
           type: "list",
-          items: ["輸入想要的畫面", "按下送出", "檢視產生的 UI"],
+          items: ["Describe the screen you want", "Press Submit", "Review the generated UI"],
           ordered: true,
         },
         {
@@ -29,12 +29,12 @@ export const mockResponse: UiPage = {
         },
         {
           type: "alert",
-          title: "提示",
-          description: "目前的畫面是預設範例，尚未呼叫模型。",
+          title: "Note",
+          description: "This is the default sample. The model has not been called yet.",
         },
         {
           type: "button",
-          label: "了解更多",
+          label: "Learn more",
           variant: "outline",
         },
       ],
@@ -45,12 +45,12 @@ export const mockResponse: UiPage = {
       children: [
         {
           type: "button",
-          label: "主要動作",
+          label: "Primary action",
           variant: "default",
         },
         {
           type: "button",
-          label: "次要動作",
+          label: "Secondary action",
           variant: "secondary",
         },
       ],

@@ -6,7 +6,7 @@ export async function generateUiTree(
   apiKey: string,
 ): Promise<unknown> {
   if (!apiKey) {
-    throw new Error("請先在右上角設定 Gemini API Key");
+    throw new Error("Set your Gemini API key in the top-right corner first");
   }
 
   const client = new GoogleGenAI({ apiKey });
@@ -16,12 +16,12 @@ export async function generateUiTree(
     input: [
       {
         type: "text",
-        text: `你是 UI JSON 產生器。只輸出符合 schema 的 JSON，不要 markdown。
-text 節點：標題用 variant "h1"|"h2"|"h3"，內文用 "body" 或省略 variant。
-排版：分區用 stack 或 card；橫向排列用 stack 且 direction "horizontal"。容器內只能放 button、text、list、badge、alert，不能再放 stack 或 card。
-元件用途：list 用於條列項目（ordered 為 true 時是編號清單）；badge 用於狀態或標籤；alert 用於提示或警告（出錯、危險用 variant "destructive"）。
-顏色：依氣氛在 page 選 theme "default"（中性）|"calm"（柔和）|"bold"（強烈）；勿輸出其他顏色欄位。按鈕語意用既有 variant。
-使用者需求：${prompt}`,
+        text: `You are a UI JSON generator. Output only JSON that matches the schema, with no markdown.
+Text nodes: use variant "h1"|"h2"|"h3" for headings, and "body" (or omit variant) for body text.
+Layout: group content with stack or card; for a horizontal row use stack with direction "horizontal". Containers may only hold button, text, list, badge, and alert; never put a stack or card inside another container.
+Component usage: list is for itemized content (an ordered list is numbered when ordered is true); badge is for a status or label; alert is for a notice or warning (use variant "destructive" for errors or danger).
+Color: choose the page theme by mood: "default" (neutral)|"calm" (soft)|"bold" (strong). Do not output any other color fields. Use the existing variants for button meaning.
+User request: ${prompt}`,
       },
     ],
     response_format: {
@@ -33,7 +33,7 @@ text 節點：標題用 variant "h1"|"h2"|"h3"，內文用 "body" 或省略 vari
 
   const text = interaction.output_text;
   if (!text) {
-    throw new Error("模型沒有回傳文字");
+    throw new Error("The model returned no text");
   }
 
   return JSON.parse(text);
