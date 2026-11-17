@@ -1,9 +1,9 @@
 import z from "zod";
 
-// 注意：這份 schema 會直接轉成 JSON Schema 送給 Gemini，而 Gemini 只支援子集
-// （文件列出 enum、anyOf，沒有 const、oneOf）。所以：
-// - 固定值的 type 用 z.enum(["x"]) 而不是 z.literal("x")（literal 會輸出 const）
-// - 聯集用 z.union 而不是 z.discriminatedUnion（後者會輸出 oneOf）
+// Note: this schema is converted directly to JSON Schema and sent to Gemini, which
+// supports only a subset (its docs list enum and anyOf, but not const or oneOf). So:
+// - Use z.enum(["x"]) for fixed values such as type, not z.literal("x") (literal emits const)
+// - Use z.union, not z.discriminatedUnion (which emits oneOf)
 export const buttonSchema = z.object({
   type: z.enum(["button"]),
   label: z.string(),
@@ -88,8 +88,8 @@ export const safeParseUiPage = (data: unknown) => {
   return uiPageSchema.safeParse(data);
 };
 
-// Gemini response_format 用的 JSON Schema，由 uiPageSchema 衍生。
-// z.toJSONSchema 會在根層加上 $schema，而它不在 Gemini 支援的子集內，所以移除。
+// JSON Schema for Gemini's response_format, derived from uiPageSchema.
+// z.toJSONSchema adds $schema at the root, which is outside the subset Gemini supports, so remove it.
 const jsonSchema = z.toJSONSchema(uiPageSchema) as Record<string, unknown>;
 delete jsonSchema.$schema;
 

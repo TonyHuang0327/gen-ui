@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-/* 預設 theme（與 data-theme="default" 相同） */
+/* Default theme (same as data-theme="default") */
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-foreground: #0f172a;
-  /* 對話框等浮層的底色。浮層掛在 body 上，不在 data-theme 範圍內，所以只需要定義在 :root */
+  /* Background for overlays such as dialogs. Overlays are mounted on body, outside any data-theme scope, so this only needs to be defined on :root. */
   --popover: #ffffff;
   --popover-foreground: #0f172a;
   --primary: #2563eb;
@@ -39,7 +39,7 @@
   --input: #e2e8f0;
 }
 
-/* 柔和 teal / sage */
+/* Soft teal / sage */
 [data-theme="calm"] {
   --background: #f8faf9;
   --foreground: #134e4a;
@@ -57,7 +57,7 @@
   --input: #c5ddd8;
 }
 
-/* 高對比：主色深墨，secondary 暖橘強調 */
+/* High contrast: dark ink primary, warm orange secondary accent */
 [data-theme="bold"] {
   --background: #ffffff;
   --foreground: #0f172a;
