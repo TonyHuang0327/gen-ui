@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { SettingsIcon } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,10 +44,9 @@ export function SettingsDialog({ apiKey, onSave, onClear }: SettingsDialogProps)
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={<Button variant="ghost" size="icon" aria-label="Settings" />}
-      >
-        <SettingsIcon />
+      <DialogTrigger render={<Button variant="ghost" />}>
+        <KeyRound />
+        API key
       </DialogTrigger>
       <DialogContent>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

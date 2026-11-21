@@ -6,6 +6,8 @@ import { safeParseUiPage, type UiPage } from "./schema";
 import { generateUiTree } from "./lib/llm";
 import { clearApiKey, loadApiKey, saveApiKey } from "./lib/api-key";
 import { SettingsDialog } from "./components/settings-dialog";
+import { SendHorizontal } from "lucide-react";
+import { cn } from "./lib/utils";
 
 function App() {
   const [apiKey, setApiKey] = useState(loadApiKey);
@@ -20,7 +22,9 @@ function App() {
     if (!trimmed) return;
 
     if (!apiKey) {
-      setError("Click the settings button in the top-right corner and paste your Gemini API key.");
+      setError(
+        "Click the settings button in the top-right corner and paste your Gemini API key.",
+      );
       return;
     }
 
@@ -57,18 +61,13 @@ function App() {
   const parsedResponse = safeParseUiPage(uiTree);
 
   return (
-    <div className="mx-auto flex min-h-svh max-w-2xl flex-col gap-6 px-4 py-8">
+    <div className="flex flex-col gap-6 px-4 py-4">
       <header className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Gen UI</h1>
           <p className="mt-1 text-sm text-neutral-600">
             Enter a prompt and let the model generate a UI.
           </p>
-          {apiKey ? null : (
-            <p className="mt-1 text-sm text-amber-700">
-              No API key set. Click the settings button in the top-right corner.
-            </p>
-          )}
         </div>
         <SettingsDialog
           apiKey={apiKey}
@@ -101,24 +100,42 @@ function App() {
         )}
       </section>
 
-      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-        <label htmlFor="prompt" className="text-sm font-medium">
-          Prompt
-        </label>
+      <form
+        className="fixed mx-auto w-full max-w-2xl inset-x-0 bottom-1"
+        onSubmit={handleSubmit}
+      >
         <textarea
           id="prompt"
           name="prompt"
-          rows={3}
           value={prompt}
-          disabled={loading}
+          disabled={loading || !apiKey}
           onChange={(event) => setPrompt(event.target.value)}
-          className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none focus-visible:border-neutral-500 focus-visible:ring-2 focus-visible:ring-neutral-400/50 disabled:opacity-50"
+          className={cn(
+            // layout
+            "block w-full resize-none overflow-y-auto field-sizing-content max-h-40",
+            // box
+            "rounded-3xl border border-neutral-300 bg-white px-3 py-2 pr-12",
+            // text
+            "text-sm",
+            // focus
+            "outline-none focus-visible:border-neutral-500 focus-visible:ring-2 focus-visible:ring-neutral-400/50",
+            // disabled
+            "disabled:opacity-50",
+          )}
+          placeholder={
+            !apiKey ? "No API key set yet." : "Please type your prompt here..."
+          }
         />
-        <div className="flex justify-end">
-          <Button type="submit" disabled={loading || !prompt.trim()}>
-            {loading ? "Generating…" : "Submit"}
-          </Button>
-        </div>
+        <Button
+          type="submit"
+          disabled={loading || !prompt.trim() || !apiKey}
+          className="absolute bottom-0.5 right-0.5 rounded-full"
+          variant="ghost"
+          size="icon"
+          aria-label="Submit"
+        >
+          <SendHorizontal />
+        </Button>
       </form>
     </div>
   );
