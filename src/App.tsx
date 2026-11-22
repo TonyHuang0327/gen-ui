@@ -30,6 +30,7 @@ function App() {
 
     setLoading(true);
     setError(null);
+    setPrompt("");
 
     try {
       const data = await generateUiTree(trimmed, apiKey);
@@ -101,7 +102,7 @@ function App() {
       </section>
 
       <form
-        className="fixed mx-auto w-full max-w-2xl inset-x-0 bottom-1"
+        className="fixed mx-auto w-full max-w-2xl inset-x-0 bottom-5"
         onSubmit={handleSubmit}
       >
         <textarea
@@ -117,6 +118,7 @@ function App() {
             "rounded-3xl border border-neutral-300 bg-white px-3 py-2 pr-12",
             // text
             "text-sm",
+            "scrollbar-none",
             // focus
             "outline-none focus-visible:border-neutral-500 focus-visible:ring-2 focus-visible:ring-neutral-400/50",
             // disabled
